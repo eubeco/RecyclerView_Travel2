@@ -1,0 +1,15 @@
+<resources>
+    <string name="app_name">RecyclerView_Travel2</string>
+    <string name="Card_1">Card1</string>
+    <string name="Card_2">Card2</string>
+    <string name="Card_3">Card3</string>
+    <string name="Card_4">Card4</string>
+    <string name="Card_5">Card5</string>
+    <string name="Card_6">Card6</string>
+    <string name="Card_7">Card7</string>
+    <string name="Card_8">Card8</string>
+    <string name="Card_9">Card9</string>
+    <string name="Card_10">Card10</string>
+    <string name="Card_11">Card11</string>
+
+</resources>
