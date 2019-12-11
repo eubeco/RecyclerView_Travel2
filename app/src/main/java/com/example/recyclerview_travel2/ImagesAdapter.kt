@@ -1,6 +1,7 @@
 package com.example.recyclerview_travel2
 
 import android.view.LayoutInflater
+import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
@@ -9,43 +10,55 @@ import androidx.recyclerview.widget.RecyclerView
 
 class ImagesAdapter(var items: ArrayList<CardView>) : RecyclerView.Adapter<ImagesAdapter.TarjViewHolder>() {
 
-    /*lateinit var onClick: (View) -> Unit*/
-
-    init {
-        this.items = items
-    }
-
-    class TarjViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-
-        private var imagen : ImageView
-        private var texto : TextView
-
         init {
-            imagen = itemView.findViewById(R.id.idImageView)
-            texto = itemView.findViewById(R.id.idTextView)
+            this.items = items
         }
 
-        /*fun bindImagen(data: CardView, onClick: (View) -> Unit) = with(itemView) {*/
-            fun bindImagen(data: CardView) {
-            imagen.setImageResource (data.card_imagen)
-            texto.setText(data.card_nombre)
+        class TarjViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
-            /*setOnClickListener { onClick(itemView) }*/
+            var imag : ImageView
+            var toolcard : androidx.appcompat.widget.Toolbar
+
+            init {
+                imag = itemView.findViewById(R.id.idtbImage)
+                toolcard = itemView.findViewById(R.id.idtbCard)
+            }
+
+            fun bindTarjeta(t: CardView) {
+                imag.setImageResource(t.card_imagen)
+                toolcard.menu.clear()
+                toolcard.inflateMenu(R.menu.menu_tar)
+                toolcard.title = t.card_nombre
+            }
+        }
+
+        override fun onCreateViewHolder(viewGroup: ViewGroup, viewType: Int): TarjViewHolder {
+            val itemView = LayoutInflater.from(viewGroup.context).inflate(R.layout.list_item, viewGroup, false)
+            return TarjViewHolder(itemView)
+        }
+
+        override fun onBindViewHolder(viewHolder: TarjViewHolder, pos: Int) {
+            var itemCard = items[pos]
+            viewHolder.bindTarjeta(itemCard)
+
+            viewHolder.toolcard.setOnMenuItemClickListener(object : androidx.appcompat.widget.Toolbar.OnMenuItemClickListener {
+                override fun onMenuItemClick(item: MenuItem): Boolean {
+                    when (item.getItemId()) {
+                        R.id.action_añadir -> {
+                            items.add(pos, CardView(itemCard.card_nombre, itemCard.card_imagen))
+                            notifyItemInserted(pos)
+                        }
+                        R.id.action_eliminar -> {
+                            items.removeAt(pos)
+                            notifyItemRemoved(pos)
+                        }
+                    }
+                    return true
+                }
+            })
+        }
+
+        override fun getItemCount(): Int {
+            return items.size
         }
     }
-
-    override fun onCreateViewHolder(viewGroup: ViewGroup, viewType: Int): TarjViewHolder {
-        val itemView = LayoutInflater.from(viewGroup.context).inflate(R.layout.list_item, viewGroup, false)
-        return TarjViewHolder(itemView)
-    }
-
-    override fun onBindViewHolder(viewHolder: TarjViewHolder, pos: Int) {
-        val item = items.get(pos)
-        /*viewHolder.bindImagen(item, onClick)*/
-        viewHolder.bindImagen(item)
-    }
-
-    override fun getItemCount(): Int {
-        return items.size
-    }
-}
